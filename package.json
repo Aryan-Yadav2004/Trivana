@@ -1,0 +1,27 @@
+{
+  "name": "major-project",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000T\u0000r\u0000i\u0000v\u0000a\u0000n\u0000a\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aryan-Yadav2004/Trivana.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aryan-Yadav2004/Trivana/issues"
+  },
+  "homepage": "https://github.com/Aryan-Yadav2004/Trivana#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.18.0"
+  }
+}
