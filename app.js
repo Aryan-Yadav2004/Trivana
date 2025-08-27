@@ -5,6 +5,10 @@ import Listing from "./models/listing.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import methodOverride from "method-override";
+import ejsMate from "ejs-mate";
+import wrapAsync from "./utils/wrapAsync.js";
+import ExpressError from "./utils/ExpressError.js";
+
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 main().then(() => {
     console.log("connected to DB");
@@ -20,6 +24,8 @@ app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
+app.engine("ejs",ejsMate);
+app.use(express.static(path.join(__dirname,"/public")));
 //Index Route
 app.get("/listings",async (req,res)=>{
     const allListings = await Listing.find({});
@@ -31,19 +37,14 @@ app.get("/listings/new",(req,res)=>{
 });
 
 //Show Route
-app.get("/listings/:id", async (req,res) => {
-    let {id} = req.params;
-    const listing = await Listing.findById(id);
-    console.log(listing);
-    res.render("listings/show.ejs",{listing});
-});
+
 
 //Create Route
-app.post("/listings",async (req,res)=>{
+app.post("/listings",wrapAsync(async (req,res)=>{
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
-});
+}));
 //Edit Route
 app.get("/listings/:id/edit",async (req,res) => {
     let {id} = req.params;
@@ -57,7 +58,7 @@ app.put("/listings/:id", async (req, res) => {
     console.log(req.body.listing);
     res.redirect("/listings");
 });
-
+//Delete Route
 app.delete("/listings/:id", async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
@@ -65,10 +66,17 @@ app.delete("/listings/:id", async (req, res) => {
     res.redirect("/listings");
 });
 
+app.get("/listings/:id", async (req,res) => {
+    let {id} = req.params;
+    const listing = await Listing.findById(id);
+    console.log(listing);
+    res.render("listings/show.ejs",{listing});
+});
+
 app.get("/",(req,res) => {
     res.send("Hi, I am root");
 });
-//Delete Route
+
 
 
 // app.get("/testListing",async (req, res) => {
@@ -84,6 +92,14 @@ app.get("/",(req,res) => {
 //     console.log("sample was saved");
 //     res.send("successful testing");
 // });
+app.all("*", (req, res, next) => { 
+    next(new ExpressError(404, "Page not found"));
+});
+
+app.use((err,req,res,next)=>{
+    let {statusCode, message} = err;
+    res.status(statusCode).send(message);
+});
 
 app.listen(8080,() => {
     console.log("server is listening to port 8080");
