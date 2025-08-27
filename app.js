@@ -8,7 +8,7 @@ import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
 import wrapAsync from "./utils/wrapAsync.js";
 import ExpressError from "./utils/ExpressError.js";
-
+import listingSchema from "./schema.js";
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 main().then(() => {
     console.log("connected to DB");
@@ -26,6 +26,18 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
+
+const validateListing = (req,res,next)=>{
+    let result = listingSchema.validate(req.body);
+    console.log(result);
+    if(result.error){
+        throw new ExpressError(400,result.error);
+    }
+    else{
+        next();
+    }
+}
+
 //Index Route
 app.get("/listings",async (req,res)=>{
     const allListings = await Listing.find({});
@@ -37,10 +49,15 @@ app.get("/listings/new",(req,res)=>{
 });
 
 //Show Route
-
+app.get("/listings/:id", async (req,res) => {
+    let {id} = req.params;
+    const listing = await Listing.findById(id);
+    console.log(listing);
+    res.render("listings/show.ejs",{listing});
+});
 
 //Create Route
-app.post("/listings",wrapAsync(async (req,res)=>{
+app.post("/listings",validateListing,wrapAsync(async (req,res)=>{
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
@@ -52,7 +69,7 @@ app.get("/listings/:id/edit",async (req,res) => {
     res.render("listings/edit.ejs",{listing});
 });
 //Update Route
-app.put("/listings/:id", async (req, res) => {
+app.put("/listings/:id", validateListing,async (req, res) => {
     let {id} = req.params;
     await Listing.findByIdAndUpdate(id,{...req.body.listing});
     console.log(req.body.listing);
@@ -64,13 +81,6 @@ app.delete("/listings/:id", async (req, res) => {
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
     res.redirect("/listings");
-});
-
-app.get("/listings/:id", async (req,res) => {
-    let {id} = req.params;
-    const listing = await Listing.findById(id);
-    console.log(listing);
-    res.render("listings/show.ejs",{listing});
 });
 
 app.get("/",(req,res) => {
@@ -91,16 +101,15 @@ app.get("/",(req,res) => {
 //     await sampleListing.save();
 //     console.log("sample was saved");
 //     res.send("successful testing");
-// });
-app.all("*", (req, res, next) => { 
-    next(new ExpressError(404, "Page not found"));
-});
-
+// }
 app.use((err,req,res,next)=>{
-    let {statusCode, message} = err;
-    res.status(statusCode).send(message);
+    const {status, message} = err;
+    res.render("error.ejs",{message});
 });
-
+app.use((req,res)=>{
+    let message = "page not found";
+    res.render("error.ejs",{message});
+});
 app.listen(8080,() => {
     console.log("server is listening to port 8080");
 });
