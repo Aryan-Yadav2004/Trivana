@@ -8,7 +8,8 @@ import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
 import wrapAsync from "./utils/wrapAsync.js";
 import ExpressError from "./utils/ExpressError.js";
-import listingSchema from "./schema.js";
+import listingSchema,{reviewSchema} from "./schema.js";
+import review from "./models/review.js";
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 main().then(() => {
     console.log("connected to DB");
@@ -51,7 +52,7 @@ app.get("/listings/new",(req,res)=>{
 //Show Route
 app.get("/listings/:id", async (req,res) => {
     let {id} = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");
     console.log(listing);
     res.render("listings/show.ejs",{listing});
 });
@@ -75,6 +76,15 @@ app.put("/listings/:id", validateListing,async (req, res) => {
     console.log(req.body.listing);
     res.redirect("/listings");
 });
+
+
+app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async(req,res)=>{
+    let { id, reviewId } = req.params;
+    await Listing.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    await review.findByIdAndDelete(reviewId);
+    res.redirect(`/listings/${id}`);
+}));
+
 //Delete Route
 app.delete("/listings/:id", async (req, res) => {
     let { id } = req.params;
@@ -82,6 +92,34 @@ app.delete("/listings/:id", async (req, res) => {
     console.log(deletedListing);
     res.redirect("/listings");
 });
+
+
+
+const validateReview = (req,res,next) => {
+    let {error} = reviewSchema.validate(req.body);
+    if(error){
+        let errMsg = error.details.map((el)=>el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    }
+    else{
+        next();
+    }
+}
+
+//Reviews
+//post route
+app.post("/listings/:id/reviews",validateReview,wrapAsync(async(req,res)=>{
+    let listing = await Listing.findById(req.params.id); 
+    let newReview = new review(req.body.review);
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+
+    console.log("new review saved");
+    res.redirect(`/listings/${listing._id}`);
+}));
+
+
 
 app.get("/",(req,res) => {
     res.send("Hi, I am root");
