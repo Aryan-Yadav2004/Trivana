@@ -1,6 +1,7 @@
 import Listing from "./models/listing.js";
 import review from "./models/review.js";
- 
+import listingSchema from "./schema.js";
+import ExpressError from "./utils/ExpressError.js";
 let isLoggedIn = (req,res,next)=>{
     if(!req.isAuthenticated()){
         console.log(req.originalUrl);
@@ -41,3 +42,15 @@ let isReviewAuthor = async (req,res,next)=>{
     next();
 }
 export {isReviewAuthor};
+
+const validateListing = (req,res,next)=>{
+    let result = listingSchema.validate(req.body);
+    console.log(result);
+    if(result.error){
+        throw new ExpressError(400,result.error);
+    }
+    else{
+        next();
+    }
+}
+export {validateListing};

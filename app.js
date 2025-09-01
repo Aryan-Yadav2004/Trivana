@@ -1,3 +1,6 @@
+import 'dotenv/config'
+console.log(process.env.CLOUD_NAME);
+
 import express from "express";
 const app = express();
 import mongoose from "mongoose";
@@ -18,6 +21,8 @@ import passport from "passport";
 import LocalStrategy from "passport-local";
 import user from "./models/user.js";
 import userRouter from "./routes/user.js";
+
+
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 main().then(() => {
