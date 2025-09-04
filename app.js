@@ -24,14 +24,15 @@ import userRouter from "./routes/user.js";
 
 
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const dbUrl = process.env.ATLASDB_URL;
 main().then(() => {
     console.log("connected to DB");
 }).catch((err) => {
     console.log(err);
 });
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbUrl);
 }
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,9 +42,9 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
-app.get("/",(req,res) => {
-    res.send("Hi, I am root");
-});
+// app.get("/",(req,res) => {
+//     res.send("Hi, I am root");
+// });
 const sessionOptions = {
     secret: "mysupersecretcode",
     resave: false,
