@@ -25,7 +25,6 @@ let showListing = async (req,res) => {
 export {showListing};
 
 let createListing = async (req,res)=>{
-
     let url = req.file.path;
     let filename = req.file.filename;
     console.log(url,"..",filename);
@@ -76,3 +75,16 @@ let deleteList = async (req, res) => {
 };
 
 export {deleteList};
+
+let searchListing = async (req,res) => {
+    let input = req.query.searchInput;
+    let result = await Listing.findOne({title: input});
+    console.log(result);
+    if(result){
+        res.redirect(`/listings/${result._id}`);
+    }
+    else{
+        res.render("error.ejs","No search Found!");
+    }
+};
+export {searchListing};

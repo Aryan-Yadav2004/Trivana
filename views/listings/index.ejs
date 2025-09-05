@@ -11,6 +11,8 @@
             margin-right: 2rem;
             margin-top: 2rem;
             opacity: 0.7;
+            border: none;
+            background: transparent;
         }
         .filter:hover{
             opacity: 1;
@@ -33,50 +35,50 @@
         }
      </style>
     <div id="filters">
-        <div class="filter">
+        <button class="filter" data-category="trending">
            <div><i class="fa-solid fa-fire"></i></div> 
            <p>Trending</p>
-        </div>
-        <div class="filter">
+        </button>
+        <button class="filter" data-category="rooms">
            <div><i class="fa-solid fa-bed"></i></div> 
            <p>Rooms</p>
-        </div>
-        <div class="filter">
+        </button>
+        <button class="filter" data-category="iconic cities">
            <div><i class="fa-solid fa-mountain-city"></i></div> 
            <p>Iconic Cities</p>
-        </div>
-        <div class="filter">
+        </button>
+        <button class="filter" data-category="mountains">
            <div><i class="fa-solid fa-mountain"></i></div> 
-           <p>Moutains</p>
-        </div>
-        <div class="filter">
+           <p>Mountains</p>
+        </button>
+        <button class="filter" data-category="castles">
            <div><i class="fa-brands fa-fort-awesome"></i></div> 
            <p>Castles</p>
-        </div>
-        <div class="filter">
+        </button>
+        <button class="filter" data-category="amazings pools">
            <div><i class="fa-solid fa-water-ladder"></i></div> 
            <p>Amazings Pools</p>
-        </div>
-        <div class="filter">
+        </button>
+        <button class="filter" data-category="camping">
            <div><i class="fa-solid fa-campground"></i></div> 
            <p>Camping</p>
-        </div>
-        <div class="filter">
+        </button>
+        <button class="filter" data-category="farms">
            <div><i class="fa-solid fa-cow"></i></div> 
            <p>Farms</p>
-        </div>
-        <div class="filter">
+        </button>
+        <button class="filter" data-category="arctic">
            <div><i class="fa-solid fa-snowflake"></i></div> 
            <p>Arctic</p>
-        </div>
-        <div class="filter">
+        </button>
+        <button class="filter" data-category="domes">
            <div><i class="fa-solid fa-igloo"></i></i></div> 
            <p>Domes</p>
-        </div>
-        <div class="filter">
+        </button>
+        <button class="filter" data-category="boats">
            <div><i class="fa-solid fa-ship"></i></i></div> 
            <p>Boats</p>
-        </div>
+        </button>
         <div class="tax-toggle">
             <div class="form-check-reverse form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
@@ -85,9 +87,12 @@
         </div>
     </div>
     <br>
-    <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1 mt-3">
+    <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1 mt-3" id="listing-container">
+
+        <%  %>
+
         <% for(let listing of allListings) { %>
-            <a href="/listings/<%=listing._id%>" class="listing-link">
+            <a href="/listings/<%=listing._id%>" class="listing-link" data-category="<%= listing.category %>">
                 <div class="card col listing-card">
                     <img src="<%= listing.image.url %>" alt="spot image" class="card-img-top" style="height: 20rem;">
                     <div class="card-img-overlay"></div>
@@ -101,12 +106,13 @@
                     </div>
                 </div>
             </a>
- <% } %>
+        <% } %>
     </div>
 
     <script>
         let taxSwitch = document.getElementById("switchCheckDefault");
         taxSwitch.addEventListener("click",()=>{
+            
             let taxInfo = document.getElementsByClassName("taxInfo");
             for(info of taxInfo){
                 if(info.style.display != "inline"){
@@ -117,4 +123,28 @@
                 }
             }
         });
+        
+        let filters = document.querySelectorAll(".filter");
+        let listings = document.querySelectorAll("#listing-container .listing-link");
+
+        filters.forEach(filterBtn => {
+            filterBtn.addEventListener("click",()=>{
+                let selectCategory = filterBtn.getAttribute("data-category");
+                listings.forEach(listing => {
+                    let listingCategory = listing.getAttribute("data-category");
+                    if(selectCategory === "trending"){
+                        listing.style.display = "block";
+                    }
+                    else{
+                        if(selectCategory === listingCategory){
+                            listing.style.display = "block";
+                        }
+                        else{
+                            listing.style.display = "none";
+                        }
+                    }
+                });
+            });
+        });
+
     </script>

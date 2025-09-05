@@ -18,16 +18,33 @@
                     <div class="invalid-feedback">Please enter description.</div>
                 </div>
                 
-                <div class="mb-3">
-                    Original Listing Image
-                    <img src="<%= originalImageUrl%>" >
+                <div class="row">
+                    <div class="mb-3">
+                        Original Listing Image
+                        <img src="<%= originalImageUrl%>" >
+                    </div>
+
+                    <div class="mb-3 col-md-8">
+                        <label for="image" class="form-lable">Upload New Image :</label>
+                        <input id="image" type="file" name="listing[image]" value="<%= listing.image%>" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3 col-md-4">
+                        <label for="category" class="form-lable">Category</label>
+                        <select class="form-select" name="listing[category]" aria-label="Default select example">
+                            <option value="rooms">Rooms</option>
+                            <option value="iconic cities">Iconic cities</option>
+                            <option value="mountains">Mountains</option>
+                            <option value="amazing pools">Amazing pools</option>
+                            <option value="camping">Camping</option>
+                            <option value="farms">Farms</option>
+                            <option value="artic">Artic</option>
+                            <option value="domes">Domes</option>
+                            <option value="boats">Boats</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="image" class="form-lable">Upload New Image :</label>
-                    <input id="image" type="file" name="listing[image]" value="<%= listing.image%>" class="form-control" required>
-                </div>
-                
                 <div class="row">
                     <div class="mb-3 col-md-4">
                         <label for="price" class="form-lable">Price:</label>
