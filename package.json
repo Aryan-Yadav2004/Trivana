@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "22.14.0"
+  },
   "name": "major-project",
   "version": "1.0.0",
   "description": "��#\u0000 \u0000T\u0000r\u0000i\u0000v\u0000a\u0000n\u0000a\u0000\r\u0000 \u0000",
@@ -22,6 +25,7 @@
     "@googlemaps/js-api-loader": "^1.16.10",
     "cloudinary": "^2.7.0",
     "connect-flash": "^0.1.1",
+    "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.1",
     "ejs": "^3.1.10",

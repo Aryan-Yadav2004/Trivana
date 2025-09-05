@@ -16,6 +16,7 @@ import review from "./models/review.js";
 import router from "./routes/listing.js";
 import reviewsRouter from "./routes/review.js";
 import session from "express-session";
+import MongoStore from 'connect-mongo';
 import flash from "connect-flash";
 import passport from "passport";
 import LocalStrategy from "passport-local";
@@ -46,7 +47,18 @@ app.use(express.static(path.join(__dirname,"/public")));
 // app.get("/",(req,res) => {
 //     res.send("Hi, I am root");
 // });
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    crypto: {
+        secret: "mysecret",
+    },
+    touchAfter: 24 * 3600,
+});
+store.on("error",()=>{
+    console.log("ERROR in MONGO SESSION STORE",err);
+});
 const sessionOptions = {
+    store,
     secret: "mysupersecretcode",
     resave: false,
     saveUninitialized: true,
@@ -56,6 +68,7 @@ const sessionOptions = {
         httpOnly: true,
     }
 };
+
 
 app.use(session(sessionOptions));
 app.use(flash());
