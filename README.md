@@ -1,172 +1,282 @@
-🌍 Trivana - Travel Listing & Booking Platform
-🚀 About Trivana
-Trivana is a modern, full-stack travel listing and booking platform that connects travelers with unique accommodations worldwide. Whether you're looking for trending destinations, iconic city stays, or peaceful mountain retreats, Trivana provides a seamless experience for discovering and booking your next adventure.
+# Trivana 🏠
 
-✨ Key Highlights
-🔐 Secure Authentication - Robust user management with Passport.js
-📱 Responsive Design - Beautiful UI that works on all devices
-🖼️ Smart Image Handling - Cloudinary integration for optimized media
-⭐ Review System - Community-driven ratings and feedback
-🗺️ Location Integration - Google Maps for precise location visualization
-🏷️ Smart Categorization - Easy filtering by destination types
-🛠️ Technology Stack
-Frontend
-EJS - Server-side templating
-Bootstrap 5 - Modern responsive framework
-JavaScript - Interactive client-side features
-CSS3 - Custom styling and animations
-Font Awesome - Beautiful iconography
-Backend
-Node.js - Runtime environment
-Express.js - Web application framework
-MongoDB - NoSQL database
-Mongoose - Object data modeling
-Passport.js - Authentication middleware
-🔌 APIs & Services
-Cloudinary - Image storage and optimization
-Google Maps - Location services and visualization
-Express Session - Session management
-Connect Flash - User feedback messages
-🎯 Features
-👤 User Management
-Registration & Login - Secure user authentication system
-Session Management - Persistent user sessions with MongoDB store
-Profile Management - User account customization
-🏠 Listing Management
-CRUD Operations - Full create, read, update, delete functionality
-Category Filtering - Browse by trending, rooms, iconic cities, mountains, and more
-Image Uploads - Seamless photo uploading with Cloudinary
-Detailed Views - Comprehensive listing information with location maps
-⭐ Review System
-Star Ratings - 5-star rating system for listings
-Written Reviews - Detailed feedback from travelers
-Review Management - Edit and delete capabilities for owners
-🎨 User Experience
-Responsive Design - Optimized for desktop, tablet, and mobile
-Interactive Filtering - Real-time category-based filtering
-Flash Notifications - Instant feedback for user actions
-Map Integration - Visual location representation
-📁 Project Architecture
-trivana/
-├── controllers/          # Business logic handlers
-│   ├── listings.js       # Listing operations
-│   ├── reviews.js        # Review management
-│   └── users.js          # User authentication
-├── models/               # Database schemas
-│   ├── listing.js        # Listing data model
-│   ├── review.js         # Review data model
-│   └── user.js           # User data model
-├── public/               # Static assets
-│   ├── css/              # Custom stylesheets
-│   ├── js/               # Client-side scripts
-│   └── images/           # Static images
-├── routes/               # API endpoints
-│   ├── listings.js       # Listing routes
-│   ├── reviews.js        # Review routes
-│   └── users.js          # Authentication routes
-├── utils/                # Utility functions
-│   ├── catchAsync.js     # Error handling
-│   └── ExpressError.js   # Custom error class
-├── views/                # EJS templates
-│   ├── listings/         # Listing pages
-│   ├── partials/         # Reusable components
-│   └── users/            # User pages
-├── app.js                # Main application
-├── middleware.js         # Custom middleware
-├── schema.js             # Validation schemas
-└── cloudConfig.js        # Cloudinary setup
-💾 Data Models
-🏠 Listing Model
-javascript
-{
-  title: String,
-  description: String,
-  price: Number,
-  location: String,
-  country: String,
-  image: {
-    url: String,
-    filename: String
-  },
-  category: String,
-  owner: ObjectId, // Reference to User
-  reviews: [ObjectId] // Array of Review references
-}
-👤 User Model
-javascript
-{
-  username: String, // unique
-  email: String,
-  password: String // hashed with Passport-Local-Mongoose
-}
-⭐ Review Model
-javascript
-{
-  rating: Number, // 1-5 scale
-  comment: String,
-  author: ObjectId, // Reference to User
-  createdAt: Date
-}
-🔐 Security Features
-Feature	Implementation
-Password Security	Hashed with Passport-Local-Mongoose
-Route Protection	Authentication middleware
-Authorization	Owner verification for CRUD operations
-Session Security	Secure cookie configuration
-Data Validation	Joi schema validation
-Environment Variables	Sensitive data protection
-🚀 Getting Started
-Prerequisites
-Node.js (v14 or higher)
-MongoDB
-Cloudinary account
-Google Maps API key
-Installation
-Clone the repository
-bash
-git clone https://github.com/username/trivana.git
+A full-stack Airbnb-inspired travel accommodation platform built with Node.js, Express, MongoDB, and EJS. Users can browse listings, create their own properties, leave reviews, and explore destinations with an integrated map feature.
+
+## ✨ Features
+
+- **User Authentication**: Secure signup/login with Passport.js
+- **Listing Management**: Create, read, update, and delete property listings
+- **Image Upload**: Upload property images via Cloudinary
+- **Review System**: Rate and review properties with a 5-star rating system
+- **Category Filtering**: Filter listings by categories (Rooms, Mountains, Castles, etc.)
+- **Interactive Maps**: View property locations with Google Maps integration
+- **Search Functionality**: Search for destinations
+- **Responsive Design**: Mobile-friendly interface with Bootstrap
+- **Authorization**: Only listing owners can edit/delete their properties
+- **Session Management**: Secure session handling with express-session and MongoDB store
+
+## 🛠️ Tech Stack
+
+### Backend
+- **Node.js** - Runtime environment
+- **Express.js** - Web application framework
+- **MongoDB** - Database
+- **Mongoose** - MongoDB ODM
+- **Passport.js** - Authentication middleware
+- **Passport-Local-Mongoose** - Simplified username/password authentication
+- **Cloudinary** - Image storage and management
+- **Multer** - File upload handling
+
+### Frontend
+- **EJS** - Templating engine
+- **Bootstrap 5** - CSS framework
+- **Font Awesome** - Icons
+- **Google Maps API** - Location mapping
+
+### Security & Validation
+- **Joi** - Data validation
+- **express-session** - Session management
+- **connect-mongo** - MongoDB session store
+- **connect-flash** - Flash messages
+- **Method-Override** - HTTP method support
+
+## 📋 Prerequisites
+
+Before running this project, ensure you have:
+
+- Node.js (v14 or higher)
+- MongoDB (local or MongoDB Atlas account)
+- Cloudinary account
+- Google Maps API key
+
+## 🚀 Installation
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/yourusername/trivana.git
 cd trivana
-Install dependencies
-bash
+```
+
+### 2. Install Dependencies
+```bash
 npm install
-Environment setup
-bash
-cp .env.example .env
-# Edit .env with your configuration
-Environment variables
-env
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/trivana
-SESSION_SECRET=your_session_secret
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_KEY=your_api_key
-CLOUDINARY_SECRET=your_api_secret
-GOOGLE_MAPS_API_KEY=your_google_maps_key
-Start the application
-bash
-# Development
-npm run dev
+```
 
-# Production
-npm start
-Visit http://localhost:3000 to see the application running!
+### 3. Set up Environment Variables
 
-📸 Screenshots
-Screenshots and demo images would go here
+Create a `.env` file in the root directory:
 
-🤝 Contributing
-Fork the repository
-Create a feature branch (git checkout -b feature/amazing-feature)
-Commit your changes (git commit -m 'Add some amazing feature')
-Push to the branch (git push origin feature/amazing-feature)
-Open a Pull Request
-📄 License
+```env
+ATLASDB_URL=your_mongodb_connection_string
+SECRET=your_session_secret_key
+STORE_SECRET=your_mongo_store_secret
+CLOUD_NAME=your_cloudinary_cloud_name
+CLOUD_API_KEY=your_cloudinary_api_key
+CLOUD_API_SECRET=your_cloudinary_api_secret
+GOOGLE_MAP_API_KEY=your_google_maps_api_key
+```
+
+### 4. Initialize the Database (Optional)
+
+To populate the database with sample listings:
+
+```bash
+node init/index.js
+```
+
+**Note**: Update the `owner` field in `init/index.js` with a valid user ID from your database.
+
+## 🏃‍♂️ Running the Application
+
+### Start the Server
+```bash
+node app.js
+```
+
+The application will be available at `http://localhost:8080`
+
+## 📁 Project Structure
+
+```
+trivana/
+├── controllers/
+│   ├── listings.js       # Listing CRUD operations
+│   ├── reviews.js        # Review operations
+│   └── user.js           # User authentication
+├── models/
+│   ├── listing.js        # Listing schema
+│   ├── review.js         # Review schema
+│   └── user.js           # User schema
+├── routes/
+│   ├── listing.js        # Listing routes
+│   ├── review.js         # Review routes
+│   └── user.js           # User routes
+├── views/
+│   ├── layouts/
+│   │   └── boilerplate.ejs
+│   ├── includes/
+│   │   ├── navbar.ejs
+│   │   ├── footer.ejs
+│   │   └── flash.ejs
+│   ├── listings/
+│   │   ├── index.ejs     # All listings
+│   │   ├── new.ejs       # Create listing
+│   │   ├── show.ejs      # Listing details
+│   │   └── edit.ejs      # Edit listing
+│   └── users/
+│       ├── signup.ejs
+│       └── login.ejs
+├── public/
+│   ├── css/
+│   │   ├── style.css
+│   │   └── rating.css
+│   └── js/
+│       ├── script.js
+│       └── map.js
+├── utils/
+│   ├── ExpressError.js   # Error handling
+│   └── wrapAsync.js      # Async error wrapper
+├── init/
+│   ├── data.js           # Sample data
+│   └── index.js          # DB initialization
+├── cloudConfig.js        # Cloudinary configuration
+├── middleware.js         # Custom middleware
+├── schema.js             # Joi validation schemas
+└── app.js                # Main application file
+```
+
+## 🎯 Key Features Explained
+
+### 1. Authentication & Authorization
+- User registration and login using Passport.js
+- Session-based authentication
+- Authorization checks for editing/deleting listings and reviews
+- Protected routes with middleware
+
+### 2. Listing Management
+- Create new property listings with images
+- Edit existing listings (owners only)
+- Delete listings (owners only)
+- Category-based filtering (trending, rooms, mountains, castles, etc.)
+- Tax toggle for price display
+
+### 3. Review System
+- 5-star rating system with visual stars
+- Comment functionality
+- Review deletion (author only)
+- Associated with user accounts
+
+### 4. Image Upload
+- Cloudinary integration for image storage
+- Multer for handling multipart form data
+- Image optimization and transformation
+
+### 5. Location Features
+- Google Maps integration
+- Geocoding for location display
+- Interactive map on listing detail pages
+
+## 🌐 Routes
+
+### User Routes
+- `GET /signup` - Display signup form
+- `POST /signup` - Register new user
+- `GET /login` - Display login form
+- `POST /login` - Authenticate user
+- `GET /logout` - Logout user
+
+### Listing Routes
+- `GET /listings` - View all listings
+- `GET /listings/new` - Show create listing form (protected)
+- `POST /listings` - Create new listing (protected)
+- `GET /listings/:id` - View listing details
+- `GET /listings/:id/edit` - Show edit form (owner only)
+- `PUT /listings/:id` - Update listing (owner only)
+- `DELETE /listings/:id` - Delete listing (owner only)
+- `GET /listings/search` - Search listings
+
+### Review Routes
+- `POST /listings/:id/reviews` - Create review (protected)
+- `DELETE /listings/:id/reviews/:reviewId` - Delete review (author only)
+
+## 🔒 Security Features
+
+- Password hashing with passport-local-mongoose
+- Session encryption
+- Input validation with Joi
+- CSRF protection considerations
+- Authorization middleware
+- Secure session storage in MongoDB
+
+## 🎨 Categories
+
+The platform supports the following listing categories:
+- 🔥 Trending
+- 🛏️ Rooms
+- 🏙️ Iconic Cities
+- ⛰️ Mountains
+- 🏰 Castles
+- 🏊 Amazing Pools
+- ⛺ Camping
+- 🐄 Farms
+- ❄️ Arctic
+- 🛖 Domes
+- 🚢 Boats
+
+## 💡 Usage Tips
+
+1. **Sign Up**: Create an account to start listing properties
+2. **Browse Listings**: Explore available properties on the home page
+3. **Filter by Category**: Use category filters to find specific types of properties
+4. **Create Listing**: Click "Trivana your home" to add a new property
+5. **Leave Reviews**: Share your experience by rating and reviewing properties
+6. **Manage Your Listings**: Edit or delete your own property listings
+7. **Search**: Use the search bar to find destinations
+
+## 🐛 Known Issues & Future Improvements
+
+- Implement booking system
+- Add payment integration
+- Enhance search with more filters (price range, amenities, etc.)
+- Add user profile pages
+- Implement favorites/wishlist feature
+- Add email verification
+- Implement forgot password functionality
+- Add more comprehensive admin panel
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-📞 Contact
-Developer: Your Name
-Email: your.email@example.com
-GitHub: @yourusername
-LinkedIn: Your LinkedIn
-⭐ Don't forget to star this repository if you found it helpful!
+## 👨‍💻 Author
 
+Your Name - [Aryan Yadav](https://github.com/Aryan-Yadav2004)
+
+## 🙏 Acknowledgments
+
+- Inspired by Airbnb
+- Bootstrap for the responsive design
+- Cloudinary for image management
+- Google Maps API for location services
+- Passport.js for authentication
+- MongoDB for flexible data storage
+
+## 📧 Contact
+
+For any queries or suggestions:
+- Email: your.email@example.com
+- Project Link: [Trivana](https://github.com/Aryan-Yadav2004/Trivana)
+
+---
+
+Made with ❤️ using Node.js, Express & MongoDB
